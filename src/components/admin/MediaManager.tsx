@@ -2,14 +2,14 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Media } from "@/db/schema";
-import { addMedia, getUploadSignature, removeMedia, reorderMedia } from "@/app/admin/actions";
+import { addMedia, getUploadSignature, removeMedia, reorderMedia, setHomePhoto } from "@/app/admin/actions";
 import { imageUrl } from "@/lib/media";
 import { uploadToCloudinary } from "@/lib/cloudinary-upload";
 
 const MAX_IMAGE_MB = 10;
 const MAX_VIDEO_MB = 100;
 
-export function MediaManager({ listingId, items, cloudinary }: { listingId: string; items: Media[]; cloudinary: boolean }) {
+export function MediaManager({ listingId, items, cloudinary, homePhoto }: { listingId: string; items: Media[]; cloudinary: boolean; homePhoto: string }) {
   const router = useRouter();
   const fileRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState("");
@@ -28,6 +28,16 @@ export function MediaManager({ listingId, items, cloudinary }: { listingId: stri
   }, [serverKey]);
 
   const coverId = order.find((m) => m.kind === "image")?.id;
+  const [home, setHome] = useState(homePhoto);
+  const [homeMsg, setHomeMsg] = useState("");
+
+  async function useOnHome(url: string) {
+    setHomeMsg("Setting home page photo…");
+    const r = await setHomePhoto(url);
+    if ("error" in r && r.error) return setHomeMsg(r.error);
+    setHome(url);
+    setHomeMsg("Home page photo updated ✓ — it now shows beside the headline.");
+  }
 
   async function saveOrder(next: Media[]) {
     setOrder(next);
@@ -121,6 +131,7 @@ export function MediaManager({ listingId, items, cloudinary }: { listingId: stri
         <button type="button" className="btn btn-line" onClick={addByUrl} disabled={!url}>Add link</button>
       </div>
       {busy && <p className="alert alert-info" role="status">{busy}</p>}
+      {homeMsg && <p className={`alert ${homeMsg.includes("✓") ? "alert-ok" : homeMsg.endsWith("…") ? "alert-info" : "alert-error"}`} role="status">{homeMsg}</p>}
       {error && <p className="alert alert-error" role="alert">{error}</p>}
       <div className="grid" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 12 }}>
         {order.map((m, i) => (
@@ -136,9 +147,14 @@ export function MediaManager({ listingId, items, cloudinary }: { listingId: stri
               </span>
               <button type="button" className="btn btn-danger btn-sm" onClick={() => remove(m.id)}>Remove</button>
             </div>
-            {m.kind === "image" && m.id !== coverId && (
-              <div style={{ padding: "0 8px 8px" }}>
-                <button type="button" className="btn btn-line btn-sm" style={{ width: "100%" }} onClick={() => makeCover(i)}>Make cover</button>
+            {m.kind === "image" && (
+              <div className="stack" style={{ padding: "0 8px 8px", gap: 6 }}>
+                {m.id !== coverId && <button type="button" className="btn btn-line btn-sm" style={{ width: "100%" }} onClick={() => makeCover(i)}>Make cover</button>}
+                {m.url === home ? (
+                  <span className="pill pill-ok" style={{ textAlign: "center" }}>On home page</span>
+                ) : (
+                  <button type="button" className="btn btn-line btn-sm" style={{ width: "100%" }} onClick={() => useOnHome(m.url)}>Use on home page</button>
+                )}
               </div>
             )}
           </div>

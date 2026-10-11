@@ -39,10 +39,10 @@ function Headline({ text }: { text: string }) {
 
 export default async function HomePage() {
   const [s, featured] = await Promise.all([getSettings(), featuredListings(4)]);
-  // Hero photos: the ones set in Site settings, else featured listings' covers.
-  const covers = featured.flatMap((l) => (l.cover ? [{ url: l.cover.url, href: `/listings/${l.slug}` }] : []));
-  const pick = (setting: string, i: number) => (setting ? { url: setting, href: null } : covers[i] ?? null);
-  const mosaic = [pick(s.heroImage1, 0), pick(s.heroImage2, 1), pick(s.heroImage3, 2)];
+  // Large photo: the one chosen in the back-office, else a stay's cover photo.
+  // The two small slots show their own photos if set, else the "Book a stay" / "Find land" tiles.
+  const stayCover = featured.find((l) => l.category === "stay" && l.cover)?.cover ?? featured.find((l) => l.cover)?.cover;
+  const mosaic = [s.heroImage1 || stayCover?.url || "", s.heroImage2, s.heroImage3];
   const fallbacks = [
     { label: "Stays", href: "/stays", bg: "var(--photo)", color: "var(--ink)" },
     { label: "Book a stay →", href: "/stays", bg: "var(--accent)", color: "#fff" },
@@ -58,10 +58,10 @@ export default async function HomePage() {
             <p>{s.heroSubtitle}</p>
           </div>
           <div className="hero-mosaic">
-            {mosaic.map((m, i) =>
-              m ? (
+            {mosaic.map((url, i) =>
+              url ? (
                 <div key={i} className="photo" style={{ padding: 0 }}>
-                  <img src={imageUrl(m.url, i === 0 ? 900 : 600)} alt="" />
+                  <img src={imageUrl(url, i === 0 ? 900 : 600)} alt="" />
                 </div>
               ) : (
                 <Link key={i} href={fallbacks[i].href} className="mosaic-tile" style={{ background: fallbacks[i].bg, color: fallbacks[i].color }}>

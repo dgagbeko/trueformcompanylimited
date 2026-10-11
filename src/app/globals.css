@@ -277,3 +277,25 @@ table.data td { padding: 14px; border-bottom: 1px solid var(--line); font-size: 
   .lightbox { padding: 56px 8px 96px; }
   .lightbox-prev, .lightbox-next { top: auto; bottom: 84px; transform: none; }
 }
+
+/* Category search pages (Stays, Cars, Land, Houses): a bold colour band in the category's
+   own colour, with the search filters in a white card that overlaps into the page. */
+.browse-band { --band: var(--accent); --band-text: #fff; --band-shadow: var(--yellow); background: var(--band); color: var(--band-text); padding: 48px 0 0; }
+.browse-car { --band: var(--ink); }
+.browse-land { --band: var(--green); }
+.browse-house { --band: var(--yellow); --band-text: var(--ink); --band-shadow: var(--ink); }
+.browse-head { display: flex; align-items: flex-end; gap: 24px; padding-bottom: 32px !important; }
+.browse-head h1 { color: var(--band-text); font-size: clamp(40px, 6vw, 72px); line-height: 0.95; letter-spacing: -0.035em; }
+.browse-head p { font-size: 18px; line-height: 1.5; max-width: 560px; opacity: 0.92; }
+.browse-card { background: #fff; color: var(--ink); border: 2px solid var(--ink); border-radius: 22px; padding: 18px; margin-bottom: -64px; position: relative; box-shadow: 8px 8px 0 var(--band-shadow); }
+.browse-card .field > label { color: var(--ink); }
+.browse-card .field input:not([type="checkbox"]), .browse-card .field select { background: var(--sand); }
+.browse-card .field input:hover, .browse-card .field select:hover { border-color: var(--input); }
+.browse-results { padding-top: 104px !important; padding-bottom: 88px !important; }
+@media (max-width: 900px) {
+  .browse-band { padding-top: 28px; }
+  .browse-head { gap: 14px; padding-bottom: 22px !important; }
+  .browse-head p { font-size: 16px; }
+  .browse-card { padding: 14px; box-shadow: 6px 6px 0 var(--band-shadow); margin-bottom: -40px; }
+  .browse-results { padding-top: 72px !important; }
+}

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { asc, eq } from "drizzle-orm";
 import { db, schema } from "@/db";
 import { cloudinaryConfigured } from "@/lib/cloudinary";
+import { getSettings } from "@/lib/settings";
 import { ListingForm } from "@/components/admin/ListingForm";
 import { MediaManager } from "@/components/admin/MediaManager";
 import { StatusPill } from "@/components/StatusPill";
@@ -25,7 +26,7 @@ export default async function EditListing({ params, searchParams }: { params: Pr
         </div>
       </div>
       {created && <p className="alert alert-ok">Listing created.{listing.status === "draft" ? " Add photos and videos, then change the status to Published and save." : ""}</p>}
-      <MediaManager listingId={id} items={items} cloudinary={cloudinaryConfigured()} />
+      <MediaManager listingId={id} items={items} cloudinary={cloudinaryConfigured()} homePhoto={(await getSettings()).heroImage1} />
       <ListingForm listing={listing} />
       <section className="box stack">
         <h2 style={{ fontSize: 18 }}>Delete listing</h2>
