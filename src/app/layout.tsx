@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { appUrl } from "@/lib/app-url";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.APP_URL || "http://localhost:3000"),
+  metadataBase: new URL(appUrl()),
   title: { default: "TrueForm Excellence — Stays, Cars, Land, Houses & Insurance", template: "%s | TrueForm Excellence" },
   description:
     "Book short stays and rental cars, find land and houses for sale, and get insurance cover. Pay securely by card or mobile money.",
