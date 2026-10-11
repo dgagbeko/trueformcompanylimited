@@ -20,8 +20,8 @@ export default async function AdminDashboard() {
   return (
     <>
       <div className="row between">
-        <h1 className="serif" style={{ fontSize: 32 }}>Dashboard</h1>
-        <Link className="btn btn-gold" href="/admin/listings/new">+ New listing</Link>
+        <h1 className="display" style={{ fontSize: 32 }}>Dashboard</h1>
+        <Link className="btn btn-accent" href="/admin/listings/new">+ New listing</Link>
       </div>
       <div className="stats">
         <div className="stat"><span>Published listings</span><b>{published}</b></div>

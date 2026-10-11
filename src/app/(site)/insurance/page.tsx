@@ -8,12 +8,14 @@ export default async function InsurancePage({ searchParams }: { searchParams: Pr
   const [{ cover = "motor" }, user, settings] = await Promise.all([searchParams, getCurrentUser(), getSettings()]);
   return (
     <>
-      <section className="hero">
-        <div className="inner" style={{ padding: "72px 24px", gap: 18 }}>
-          <span className="eyebrow" style={{ color: "var(--gold)" }}>Insurance</span>
-          <h1 style={{ fontSize: "clamp(34px, 4.5vw, 56px)" }}>Cover for the car you drive, the home you own and the trips you take.</h1>
-          <p>Choose a cover type, tell us a little about what you want to protect, and our team returns a quote.</p>
-        </div>
+      <section className="wrap stack" style={{ paddingTop: 56, gap: 18 }}>
+        <span className="eyebrow">Insurance</span>
+        <h1 className="display" style={{ fontSize: "clamp(40px, 6vw, 80px)", lineHeight: 0.98, maxWidth: 900 }}>
+          Cover for your car, your home <span className="t-green">and your travels.</span>
+        </h1>
+        <p style={{ fontSize: 19, lineHeight: 1.55, color: "var(--body)", maxWidth: 620 }}>
+          Choose a cover type, tell us what you want to protect, and our team returns a quote.
+        </p>
       </section>
       <InsuranceForm initial={cover} name={user?.fullName ?? ""} email={user?.email ?? ""} phone={user?.phone ?? ""} partner={settings.insurancePartner} />
     </>

@@ -6,7 +6,7 @@ export default function NewListing() {
     <>
       <div className="stack" style={{ gap: 6 }}>
         <Link href="/admin/listings" style={{ fontSize: 14 }}>← All listings</Link>
-        <h1 className="serif" style={{ fontSize: 32 }}>New listing</h1>
+        <h1 className="display" style={{ fontSize: 32 }}>New listing</h1>
       </div>
       <ListingForm />
     </>

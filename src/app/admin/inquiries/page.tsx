@@ -15,7 +15,7 @@ export default async function AdminInquiries() {
     .limit(200);
   return (
     <>
-      <h1 className="serif" style={{ fontSize: 32 }}>Land &amp; house inquiries</h1>
+      <h1 className="display" style={{ fontSize: 32 }}>Land &amp; house inquiries</h1>
       {rows.length === 0 && <p className="box muted">No inquiries yet.</p>}
       {rows.map(({ i, l, u }) => (
         <section key={i.id} className="box stack" style={{ gap: 12 }}>
@@ -36,7 +36,7 @@ export default async function AdminInquiries() {
               <select id={`s-${i.id}`} name="status" defaultValue={i.status}><option value="new">New</option><option value="in_discussion">In discussion</option><option value="deposit_paid">Deposit paid</option><option value="closed">Closed</option></select></div>
             <div className="field" style={{ flex: "3 1 300px" }}><label htmlFor={`n-${i.id}`}>Note to customer</label><input id={`n-${i.id}`} name="adminNote" defaultValue={i.adminNote} placeholder="e.g. Site visit booked for Saturday 10am" /></div>
             <label className="check"><input type="checkbox" name="notify" /> Email the customer</label>
-            <button className="btn btn-navy btn-sm">Save</button>
+            <button className="btn btn-ink btn-sm">Save</button>
           </form>
           {l.status === "published" && (
             <form action={setListingStatus} className="row">

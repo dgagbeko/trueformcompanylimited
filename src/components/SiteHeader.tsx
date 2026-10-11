@@ -1,43 +1,31 @@
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
 import { NavLinks } from "./NavLinks";
+import { MobileMenu } from "./MobileMenu";
+import { Brand } from "./Brand";
 
 export async function SiteHeader() {
   const user = await getCurrentUser();
   return (
     <header className="site-header">
+      <div className="kente" />
       <div className="inner">
-        <Link href="/" className="brand" aria-label="TrueForm Excellence home">
-          <span className="brand-mark">TF</span>
-          <span className="brand-name">
-            <b>TrueForm</b>
-            <small>EXCELLENCE</small>
-          </span>
-        </Link>
+        <Brand />
         <NavLinks />
-        <div className="row">
+        <div className="header-actions">
           {user ? (
             <>
-              {user.role === "admin" && (
-                <Link className="navlink" href="/admin">
-                  Back-office
-                </Link>
-              )}
-              <Link className="btn btn-navy" href="/account">
-                My account
-              </Link>
+              {user.role === "admin" && <Link className="navlink" href="/admin">Back-office</Link>}
+              <Link className="btn btn-ink" href="/account">My account</Link>
             </>
           ) : (
             <>
-              <Link className="navlink" href="/login">
-                Sign in
-              </Link>
-              <Link className="btn btn-navy" href="/register">
-                Create account
-              </Link>
+              <Link className="navlink" href="/login">Sign in</Link>
+              <Link className="btn btn-ink" href="/register">Join free</Link>
             </>
           )}
         </div>
+        <MobileMenu signedIn={Boolean(user)} isAdmin={user?.role === "admin"} />
       </div>
     </header>
   );

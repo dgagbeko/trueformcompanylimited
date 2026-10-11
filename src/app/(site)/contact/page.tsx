@@ -9,7 +9,7 @@ export default async function ContactPage() {
   return (
     <div className="wrap with-aside" style={{ padding: "56px 24px 88px" }}>
       <div className="main stack">
-        <h1 className="serif" style={{ fontSize: 40 }}>Contact us</h1>
+        <h1 className="display" style={{ fontSize: 40 }}>Contact us</h1>
         <p className="muted" style={{ lineHeight: 1.6 }}>Questions about a booking, a property or insurance? Send us a message and our team will respond.</p>
         <div className="stack" style={{ gap: 8 }}>
           {s.supportPhone && <span><b>Phone:</b> <a href={`tel:${s.supportPhone.replace(/\s/g, "")}`}>{s.supportPhone}</a></span>}

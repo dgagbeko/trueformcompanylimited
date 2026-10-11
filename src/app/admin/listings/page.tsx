@@ -19,13 +19,13 @@ export default async function AdminListings({ searchParams }: { searchParams: Pr
   return (
     <>
       <div className="row between">
-        <h1 className="serif" style={{ fontSize: 32 }}>Listings</h1>
-        <Link className="btn btn-gold" href="/admin/listings/new">+ New listing</Link>
+        <h1 className="display" style={{ fontSize: 32 }}>Listings</h1>
+        <Link className="btn btn-accent" href="/admin/listings/new">+ New listing</Link>
       </div>
       <section className="box stack">
         <form className="row">
           {tabs.map(([v, label]) => (
-            <Link key={v} href={v ? `/admin/listings?category=${v}` : "/admin/listings"} className={`btn btn-sm ${category === v ? "btn-navy" : "btn-line"}`}>{label}</Link>
+            <Link key={v} href={v ? `/admin/listings?category=${v}` : "/admin/listings"} className={`btn btn-sm ${category === v ? "btn-ink" : "btn-line"}`}>{label}</Link>
           ))}
           {category && <input type="hidden" name="category" value={category} />}
           <label htmlFor="q" className="sr-only">Search listings</label>
@@ -37,7 +37,7 @@ export default async function AdminListings({ searchParams }: { searchParams: Pr
             <tbody>
               {rows.map(({ l, media }) => (
                 <tr key={l.id}>
-                  <td style={{ fontWeight: 800, color: "var(--navy)" }}>{l.title}{l.featured && <span className="pill pill-info" style={{ marginLeft: 8 }}>Featured</span>}</td>
+                  <td style={{ fontWeight: 800, color: "var(--ink)" }}>{l.title}{l.featured && <span className="pill pill-info" style={{ marginLeft: 8 }}>Featured</span>}</td>
                   <td>{CATEGORY_LABEL[l.category]}</td>
                   <td>{l.location}</td>
                   <td style={{ whiteSpace: "nowrap" }}>{formatMoney(l.price)} {priceUnit(l.category)}</td>

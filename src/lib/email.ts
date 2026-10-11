@@ -10,13 +10,14 @@ export { appUrl };
 function layout(title: string, lines: string[], cta?: { label: string; url: string }) {
   const body = lines.map((l) => `<p style="margin:0 0 14px;line-height:1.6">${esc(l)}</p>`).join("");
   const button = cta
-    ? `<p style="margin:24px 0"><a href="${esc(cta.url)}" style="background:#C49A3A;color:#0E2238;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:700;display:inline-block">${esc(cta.label)}</a></p>`
+    ? `<p style="margin:24px 0"><a href="${esc(cta.url)}" style="background:#C13D14;color:#ffffff;padding:13px 24px;border-radius:12px;text-decoration:none;font-weight:700;display:inline-block">${esc(cta.label)}</a></p>`
     : "";
-  return `<!doctype html><html><body style="margin:0;background:#F4F6F9;font-family:Arial,Helvetica,sans-serif;color:#0E1A26">
+  return `<!doctype html><html><body style="margin:0;background:#FAF7F2;font-family:Arial,Helvetica,sans-serif;color:#141414">
 <div style="max-width:560px;margin:0 auto;padding:24px">
-<div style="background:#0E2238;color:#fff;padding:18px 24px;border-radius:12px 12px 0 0;font-size:18px;font-weight:700">TrueForm <span style="color:#C49A3A">Excellence</span></div>
-<div style="background:#fff;padding:28px 24px;border-radius:0 0 12px 12px">
-<h1 style="font-size:22px;margin:0 0 16px;color:#0E2238">${esc(title)}</h1>${body}${button}
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-radius:16px 16px 0 0;overflow:hidden"><tr><td style="height:6px;background:#C13D14"></td><td style="height:6px;background:#141414"></td><td style="height:6px;background:#F2B33D"></td><td style="height:6px;background:#1D6B47"></td></tr></table>
+<div style="background:#141414;color:#fff;padding:18px 24px;font-size:22px;font-weight:800;letter-spacing:-0.5px">trueform<span style="color:#F2B33D">.</span></div>
+<div style="background:#fff;padding:28px 24px;border-radius:0 0 16px 16px;border:1px solid #E8E2D9;border-top:0">
+<h1 style="font-size:24px;margin:0 0 16px;color:#141414">${esc(title)}</h1>${body}${button}
 </div></div></body></html>`;
 }
 

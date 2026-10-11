@@ -19,7 +19,7 @@ export function InsuranceForm({ initial, name, email, phone, partner }: { initia
   return (
     <>
       <section className="wrap stack" style={{ padding: "64px 24px 24px", gap: 24 }}>
-        <h2 className="serif" style={{ fontSize: 32 }}>1. Choose your cover</h2>
+        <h2 className="display" style={{ fontSize: 32 }}>1. Choose your cover</h2>
         <div className="grid" role="radiogroup" aria-label="Cover type" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 16 }}>
           {(Object.keys(PLANS) as PlanId[]).map((k) => (
             <button
@@ -29,7 +29,7 @@ export function InsuranceForm({ initial, name, email, phone, partner }: { initia
               aria-checked={plan === k}
               onClick={() => setPlan(k)}
               className="stack"
-              style={{ gap: 12, padding: 24, borderRadius: 12, textAlign: "left", cursor: "pointer", font: "inherit", background: plan === k ? "var(--navy)" : "#fff", color: plan === k ? "#fff" : "var(--navy)", border: `2px solid ${plan === k ? "var(--gold)" : "var(--line)"}` }}
+              style={{ gap: 12, padding: 24, borderRadius: 12, textAlign: "left", cursor: "pointer", font: "inherit", background: plan === k ? "var(--ink)" : "#fff", color: plan === k ? "#fff" : "var(--ink)", border: `2px solid ${plan === k ? "var(--ink)" : "var(--line)"}`, boxShadow: plan === k ? "6px 6px 0 var(--yellow)" : "none" }}
             >
               <span style={{ fontSize: 20, fontWeight: 800 }}>{PLANS[k].name}</span>
               <span style={{ fontSize: 15, lineHeight: 1.55, opacity: 0.85 }}>{PLANS[k].body}</span>
@@ -40,10 +40,10 @@ export function InsuranceForm({ initial, name, email, phone, partner }: { initia
       </section>
       <section className="wrap with-aside" style={{ padding: "32px 24px 88px" }}>
         <div className="stack" style={{ flex: "1 1 380px", minWidth: 0 }}>
-          <h2 className="serif" style={{ fontSize: 32 }}>What {p.name.toLowerCase()} covers</h2>
+          <h2 className="display" style={{ fontSize: 32 }}>What {p.name.toLowerCase()} covers</h2>
           <ul className="stack" style={{ listStyle: "none", padding: 0, margin: 0, gap: 12 }}>
             {p.points.map((pt) => (
-              <li key={pt} className="row" style={{ gap: 12, alignItems: "flex-start", flexWrap: "nowrap" }}><span style={{ color: "var(--gold-text)" }}><Icon name="check" size={20} /></span>{pt}</li>
+              <li key={pt} className="row" style={{ gap: 12, alignItems: "flex-start", flexWrap: "nowrap" }}><span style={{ color: "var(--accent-text)" }}><Icon name="check" size={20} /></span>{pt}</li>
             ))}
           </ul>
           <p className="hint">Final terms and premiums are set by our insurance partner{partner ? ` (${partner})` : ""}.</p>
@@ -53,7 +53,7 @@ export function InsuranceForm({ initial, name, email, phone, partner }: { initia
             <p className="alert alert-ok" role="status">{state.ok}</p>
           ) : (
             <form onSubmit={onSubmit} className="stack">
-              <h2 className="serif" style={{ fontSize: 26 }}>2. Request a quote</h2>
+              <h2 className="display" style={{ fontSize: 26 }}>2. Request a quote</h2>
               <input type="hidden" name="coverType" value={p.name} />
               <div className="row" style={{ gap: 12 }}>
                 <div className="field"><label htmlFor="fullName">Full name</label><input id="fullName" name="fullName" defaultValue={name} required /></div>
@@ -63,7 +63,7 @@ export function InsuranceForm({ initial, name, email, phone, partner }: { initia
               <div className="field"><label htmlFor="details">{p.detail}</label><input id="details" name="details" placeholder={p.hint} /></div>
               <div className="field"><label htmlFor="startDate">Cover start date</label><input id="startDate" name="startDate" type="date" /></div>
               {state?.error && <p className="alert alert-error" role="alert">{state.error}</p>}
-              <button className="btn btn-gold" disabled={pending}>{pending ? "Sending…" : "Request my quote"}</button>
+              <button className="btn btn-accent" disabled={pending}>{pending ? "Sending…" : "Request my quote"}</button>
               <span className="hint">We reply by email and phone. No payment is taken until you accept a quote.</span>
             </form>
           )}

@@ -20,15 +20,15 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   return (
     <div className="shell">
       <nav className="shell-nav" aria-label="Back-office">
-        <Link href="/admin" className="row" style={{ gap: 12, padding: "0 8px 24px", flexWrap: "nowrap" }}>
-          <span className="brand-mark" style={{ background: "var(--gold)", color: "var(--navy)" }}>TF</span>
+        <Link href="/admin" className="row shell-brand" style={{ gap: 12, padding: "0 8px 24px", flexWrap: "nowrap" }}>
+          <span className="brand-mark" style={{ background: "var(--yellow)", color: "var(--ink)" }}>tf</span>
           <span className="stack" style={{ gap: 0, lineHeight: 1.2 }}>
-            <b style={{ color: "#fff" }}>TrueForm</b>
-            <small style={{ fontSize: 12, color: "var(--gold)", fontWeight: 700, letterSpacing: ".12em" }}>BACK-OFFICE</small>
+            <b className="display" style={{ color: "#fff", fontSize: 21 }}>trueform</b>
+            <small style={{ fontSize: 11, color: "var(--yellow)", fontWeight: 700, letterSpacing: ".18em" }}>BACK-OFFICE</small>
           </span>
         </Link>
         {NAV.map(([href, label]) => <Link key={href} href={href}>{label}</Link>)}
-        <div style={{ marginTop: "auto", paddingTop: 24, fontSize: 13, color: "var(--on-navy)" }}>
+        <div className="shell-foot" style={{ marginTop: "auto", paddingTop: 24, fontSize: 13, color: "var(--on-ink)" }}>
           Signed in as {admin.fullName}
           <br />
           <Link href="/" style={{ padding: 0, minHeight: 32 }}>← View website</Link>

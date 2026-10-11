@@ -10,7 +10,7 @@ export default async function AdminActivity() {
     .limit(300);
   return (
     <>
-      <h1 className="serif" style={{ fontSize: 32 }}>Activity log</h1>
+      <h1 className="display" style={{ fontSize: 32 }}>Activity log</h1>
       <section className="box table-wrap">
         <table className="data">
           <thead><tr><th>When</th><th>Admin</th><th>Action</th><th>Item</th></tr></thead>

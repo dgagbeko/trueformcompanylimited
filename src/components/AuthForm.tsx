@@ -36,7 +36,7 @@ export function ActionForm({
       ))}
       {state?.error && <p className="alert alert-error" role="alert">{state.error}</p>}
       {state?.ok && <p className="alert alert-ok" role="status">{state.ok}</p>}
-      <button className="btn btn-gold" disabled={pending}>{pending ? "Please wait…" : submit}</button>
+      <button className="btn btn-accent" disabled={pending}>{pending ? "Please wait…" : submit}</button>
     </form>
   );
 }

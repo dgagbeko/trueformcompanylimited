@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import type { Media } from "@/db/schema";
 import { addMedia, getUploadSignature, removeMedia, reorderMedia } from "@/app/admin/actions";
 import { imageUrl } from "@/lib/media";
+import { uploadToCloudinary } from "@/lib/cloudinary-upload";
 
 const MAX_IMAGE_MB = 10;
 const MAX_VIDEO_MB = 100;
@@ -76,24 +77,9 @@ export function MediaManager({ listingId, items, cloudinary }: { listingId: stri
       setBusy(`Uploading ${i + 1} of ${files.length}: ${file.name}…`);
       const sig = await getUploadSignature(listingId);
       if (!sig) { setError("Cloudinary is not configured."); break; }
-      const body = new FormData();
-      body.append("file", file);
-      body.append("api_key", sig.apiKey);
-      body.append("timestamp", String(sig.timestamp));
-      body.append("signature", sig.signature);
-      body.append("folder", sig.folder);
-      try {
-        const res = await fetch(`https://api.cloudinary.com/v1_1/${encodeURIComponent(sig.cloudName)}/${isVideo ? "video" : "image"}/upload`, { method: "POST", body });
-        const json = (await res.json().catch(() => ({}))) as { secure_url?: string; public_id?: string; error?: { message?: string } };
-        if (!res.ok || !json.secure_url) {
-          // Show Cloudinary's own reason (e.g. "Invalid Signature", "Invalid cloud_name") so setup problems are easy to fix.
-          setError(`Upload failed for ${file.name}: ${json.error?.message ?? `Cloudinary returned ${res.status}`}`);
-          continue;
-        }
-        await addMedia(listingId, json.secure_url, isVideo ? "video" : "image", json.public_id ?? null);
-      } catch {
-        setError(`Upload failed for ${file.name}: could not reach Cloudinary. Check your internet connection and try again.`);
-      }
+      const up = await uploadToCloudinary(file, sig);
+      if ("error" in up) { setError(`Upload failed for ${file.name}: ${up.error}`); continue; }
+      await addMedia(listingId, up.url, isVideo ? "video" : "image", up.publicId || null);
     }
     setBusy("");
     if (fileRef.current) fileRef.current.value = "";
@@ -118,7 +104,7 @@ export function MediaManager({ listingId, items, cloudinary }: { listingId: stri
       </div>
       {cloudinary ? (
         <div className="row">
-          <label className="btn btn-navy" style={{ cursor: "pointer" }}>
+          <label className="btn btn-ink" style={{ cursor: "pointer" }}>
             Upload photos or videos
             <input ref={fileRef} type="file" accept="image/*,video/*" multiple className="sr-only" onChange={(e) => upload(e.target.files)} disabled={Boolean(busy)} />
           </label>
@@ -138,7 +124,7 @@ export function MediaManager({ listingId, items, cloudinary }: { listingId: stri
       {error && <p className="alert alert-error" role="alert">{error}</p>}
       <div className="grid" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 12 }}>
         {order.map((m, i) => (
-          <div key={m.id} className="card" style={{ overflow: "hidden", outline: m.id === coverId ? "2px solid var(--gold)" : undefined }}>
+          <div key={m.id} className="card" style={{ overflow: "hidden", outline: m.id === coverId ? "2px solid var(--accent)" : undefined }}>
             <div className="photo" style={{ height: 130, padding: 8 }}>
               {m.kind === "image" ? <img src={imageUrl(m.url, 400)} alt="" /> : <video src={m.url} muted preload="metadata" />}
               <span style={{ position: "relative" }} className="tag">{m.id === coverId ? "COVER" : `${i + 1} · ${m.kind.toUpperCase()}`}</span>

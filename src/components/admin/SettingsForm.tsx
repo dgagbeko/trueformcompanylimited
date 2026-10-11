@@ -3,6 +3,7 @@ import { useFormAction } from "@/components/useFormAction";
 import { saveSettings } from "@/app/admin/actions";
 import type { FormState } from "@/app/(site)/actions";
 import type { SiteSettings } from "@/lib/settings";
+import { ImageField } from "./ImageField";
 
 export function SettingsForm({ settings: s }: { settings: SiteSettings }) {
   const [state, onSubmit, pending] = useFormAction(saveSettings);
@@ -11,7 +12,15 @@ export function SettingsForm({ settings: s }: { settings: SiteSettings }) {
       <section className="box stack">
         <h2 style={{ fontSize: 18 }}>Home page</h2>
         <div className="field"><label htmlFor="heroTitle">Headline</label><input id="heroTitle" name="heroTitle" defaultValue={s.heroTitle} /></div>
+        <span className="hint">Write the headline as short sentences ending in a full stop, e.g. “Stay. Drive. Own. Protect.” — the third is shown in orange and the fourth in green.</span>
         <div className="field"><label htmlFor="heroSubtitle">Sub-heading</label><textarea id="heroSubtitle" name="heroSubtitle" rows={3} defaultValue={s.heroSubtitle} /></div>
+      </section>
+      <section className="box stack">
+        <h2 style={{ fontSize: 18 }}>Home page photos</h2>
+        <p className="hint">Three photos beside the headline: one tall photo and two smaller ones. Use bright, high-quality landscape photos of your stays, cars and land. Empty slots use your featured listings’ cover photos instead.</p>
+        <ImageField name="heroImage1" label="Large photo" defaultValue={s.heroImage1} />
+        <ImageField name="heroImage2" label="Top-right photo" defaultValue={s.heroImage2} />
+        <ImageField name="heroImage3" label="Bottom-right photo" defaultValue={s.heroImage3} />
       </section>
       <section className="box stack">
         <h2 style={{ fontSize: 18 }}>Contact details (footer &amp; contact page)</h2>
@@ -32,7 +41,7 @@ export function SettingsForm({ settings: s }: { settings: SiteSettings }) {
       </section>
       {state?.error && <p className="alert alert-error" role="alert">{state.error}</p>}
       {state?.ok && <p className="alert alert-ok" role="status">{state.ok}</p>}
-      <button className="btn btn-gold" style={{ alignSelf: "flex-start" }} disabled={pending}>{pending ? "Saving…" : "Save settings"}</button>
+      <button className="btn btn-accent" style={{ alignSelf: "flex-start" }} disabled={pending}>{pending ? "Saving…" : "Save settings"}</button>
     </form>
   );
 }

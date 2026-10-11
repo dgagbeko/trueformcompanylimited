@@ -50,7 +50,7 @@ export function BookingForm(props: {
         </div>
       )}
       {state?.error && <p className="alert alert-error" role="alert">{state.error}</p>}
-      <button className="btn btn-gold" disabled={pending}>{pending ? "Checking availability…" : isCar ? "Book this car" : "Reserve and pay"}</button>
+      <button className="btn btn-accent" disabled={pending}>{pending ? "Checking availability…" : isCar ? "Book this car" : "Reserve and pay"}</button>
       <span className="hint" style={{ textAlign: "center" }}>Requires a verified account. Pay by card or mobile money.</span>
     </form>
   );

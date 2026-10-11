@@ -9,7 +9,7 @@ export default async function AdminUsers() {
   const rows = await db.select().from(schema.users).orderBy(desc(schema.users.createdAt)).limit(500);
   return (
     <>
-      <h1 className="serif" style={{ fontSize: 32 }}>Customers &amp; admins</h1>
+      <h1 className="display" style={{ fontSize: 32 }}>Customers &amp; admins</h1>
       <p className="muted">To add a staff member, ask them to create a normal account on the website, then make them an admin here.</p>
       <section className="box table-wrap">
         <table className="data">

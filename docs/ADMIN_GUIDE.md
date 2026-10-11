@@ -74,7 +74,10 @@ Write the quote in the note field, set the status to **Quoted**, and tick **Emai
 ## Site settings
 
 **Site settings** controls text that appears across the website:
-- Home page headline and sub-heading
+- Home page headline and sub-heading. Write the headline as short sentences, e.g. "Stay. Drive. Own. Protect." —
+  the third sentence is shown in orange and the fourth in green.
+- Home page photos: one large and two small photos beside the headline (upload or paste a link).
+  Empty slots automatically use your featured listings' cover photos.
 - Support phone, support email and office address (footer and Contact page)
 - Free-cancellation window (hours before start), and the cancellation policy text shown to customers
 - Deposit percentage for reserving land and houses

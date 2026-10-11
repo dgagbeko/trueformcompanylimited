@@ -126,7 +126,7 @@ export function ListingForm({ listing }: { listing?: Listing }) {
       {state?.error && <p className="alert alert-error" role="alert">{state.error}</p>}
       {state?.ok && <p className="alert alert-ok" role="status">{state.ok}</p>}
       <div className="row">
-        <button className="btn btn-gold" disabled={pending}>{pending ? "Saving…" : l ? "Save changes" : "Create listing"}</button>
+        <button className="btn btn-accent" disabled={pending}>{pending ? "Saving…" : l ? "Save changes" : "Create listing"}</button>
         {!l && <span className="hint">You can add photos and videos after creating the listing.</span>}
       </div>
     </form>
