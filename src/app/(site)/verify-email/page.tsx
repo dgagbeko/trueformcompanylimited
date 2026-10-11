@@ -15,7 +15,7 @@ export default async function VerifyPage({ searchParams }: { searchParams: Promi
       await db.update(schema.users).set({ emailVerifiedAt: new Date() }).where(eq(schema.users.id, userId));
       return (
         <AuthCard title="Email verified" intro="Thank you — your account is ready. You can now book stays and cars, and send inquiries.">
-          <Link className="btn btn-gold" href="/account">Go to my account</Link>
+          <Link className="btn btn-accent" href="/account">Go to my account</Link>
         </AuthCard>
       );
     }
@@ -24,7 +24,7 @@ export default async function VerifyPage({ searchParams }: { searchParams: Promi
   if (user?.emailVerifiedAt) {
     return (
       <AuthCard title="Email already verified">
-        <Link className="btn btn-gold" href="/account">Go to my account</Link>
+        <Link className="btn btn-accent" href="/account">Go to my account</Link>
       </AuthCard>
     );
   }

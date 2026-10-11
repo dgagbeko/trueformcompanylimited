@@ -45,7 +45,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
     <div className="band">
       <div className="wrap stack" style={{ padding: "40px 24px 88px", gap: 24 }}>
         <div className="row between">
-          <h1 className="serif" style={{ fontSize: 34 }}>Welcome back, {user.fullName.split(" ")[0]}</h1>
+          <h1 className="display" style={{ fontSize: 34 }}>Welcome back, {user.fullName.split(" ")[0]}</h1>
           <form action={logout}><button className="btn btn-line btn-sm">Log out</button></form>
         </div>
         {!user.emailVerifiedAt && (
@@ -72,7 +72,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
                 </div>
                 {active && b.startDate >= today && (
                   <div className="row" style={{ gap: 8 }}>
-                    {b.status === "pending_payment" && <Link className="btn btn-gold btn-sm" href={`/checkout/${b.reference}`}>Pay now</Link>}
+                    {b.status === "pending_payment" && <Link className="btn btn-accent btn-sm" href={`/checkout/${b.reference}`}>Pay now</Link>}
                     <ModifyBooking id={b.id} start={b.startDate} end={b.endDate} today={today} />
                     <form action={cancelMyBooking}><input type="hidden" name="id" value={b.id} /><button className="btn btn-danger btn-sm">Cancel booking</button></form>
                   </div>
@@ -97,7 +97,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
               {deposit > 0 && l.status === "published" && (i.status === "new" || i.status === "in_discussion") && (
                 <form action={startPayment}>
                   <input type="hidden" name="kind" value="deposit" /><input type="hidden" name="id" value={i.id} />
-                  <button className="btn btn-gold btn-sm">Pay {deposit}% deposit ({formatMoney(Math.round((l.price * deposit) / 100))})</button>
+                  <button className="btn btn-accent btn-sm">Pay {deposit}% deposit ({formatMoney(Math.round((l.price * deposit) / 100))})</button>
                 </form>
               )}
             </div>

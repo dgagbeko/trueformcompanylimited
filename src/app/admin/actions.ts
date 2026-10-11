@@ -116,6 +116,13 @@ export async function getUploadSignature(listingId: string) {
   return signUpload(`trueform/listings/${listingId}`);
 }
 
+/** Signature for uploading site-wide images (home page photos) straight to Cloudinary. */
+export async function getSiteUploadSignature() {
+  await requireAdmin();
+  if (!cloudinaryConfigured()) return null;
+  return signUpload("trueform/site");
+}
+
 export async function addMedia(listingId: string, url: string, kind: "image" | "video", publicId: string | null) {
   const admin = await requireAdmin();
   if (!/^https:\/\//.test(url)) return { error: "Media must be an https:// URL." };
@@ -231,6 +238,10 @@ export async function setUserRole(fd: FormData) {
 
 export async function saveSettings(_: FormState, fd: FormData): Promise<FormState> {
   const admin = await requireAdmin();
+  for (const key of Object.keys(SETTING_DEFAULTS) as SettingKey[]) {
+    if (key.startsWith("heroImage") && str(fd, key) && !/^https:\/\//.test(str(fd, key)))
+      return { error: "Home page photos must be links starting with https:// (or use Upload photo)." };
+  }
   for (const key of Object.keys(SETTING_DEFAULTS) as SettingKey[]) {
     if (!fd.has(key)) continue;
     const value = str(fd, key);

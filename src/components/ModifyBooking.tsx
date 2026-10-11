@@ -11,7 +11,7 @@ export function ModifyBooking({ id, start, end, today }: { id: string; start: st
         <input type="hidden" name="id" value={id} />
         <div className="field" style={{ flexBasis: 150 }}><label htmlFor={`s-${id}`}>From</label><input id={`s-${id}`} name="start" type="date" min={today} defaultValue={start} required /></div>
         <div className="field" style={{ flexBasis: 150 }}><label htmlFor={`e-${id}`}>To</label><input id={`e-${id}`} name="end" type="date" min={today} defaultValue={end} required /></div>
-        <button className="btn btn-navy btn-sm" disabled={pending}>{pending ? "Saving…" : "Save dates"}</button>
+        <button className="btn btn-ink btn-sm" disabled={pending}>{pending ? "Saving…" : "Save dates"}</button>
         {state?.error && <p className="alert alert-error" role="alert" style={{ flexBasis: "100%" }}>{state.error}</p>}
         {state?.ok && <p className="alert alert-ok" role="status" style={{ flexBasis: "100%" }}>{state.ok}</p>}
       </form>

@@ -20,7 +20,7 @@ export default async function EditListing({ params, searchParams }: { params: Pr
       <div className="row between">
         <div className="stack" style={{ gap: 6 }}>
           <Link href="/admin/listings" style={{ fontSize: 14 }}>← All listings</Link>
-          <h1 className="serif" style={{ fontSize: 32 }}>{listing.title}</h1>
+          <h1 className="display" style={{ fontSize: 32 }}>{listing.title}</h1>
           <span className="row" style={{ gap: 10 }}><StatusPill status={listing.status} /><Link href={`/listings/${listing.slug}`} target="_blank">Preview on website ↗</Link></span>
         </div>
       </div>

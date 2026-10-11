@@ -14,7 +14,7 @@ export default async function AdminPayments() {
   return (
     <>
       <div className="row between">
-        <h1 className="serif" style={{ fontSize: 32 }}>Payments</h1>
+        <h1 className="display" style={{ fontSize: 32 }}>Payments</h1>
         <span className="hint">For full settlement reports and exports, use the Paystack dashboard.</span>
       </div>
       <section className="box table-wrap">

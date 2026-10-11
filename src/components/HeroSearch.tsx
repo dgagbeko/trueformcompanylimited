@@ -27,10 +27,10 @@ export function HeroSearch() {
           <div className="field" style={{ flexBasis: 260 }}><label htmlFor="s-q">Location</label><input id="s-q" name="q" placeholder="City, area or landmark" /></div>
           <div className="field"><label htmlFor="s-in">Check-in</label><input id="s-in" name="start" type="date" /></div>
           <div className="field"><label htmlFor="s-out">Check-out</label><input id="s-out" name="end" type="date" /></div>
-          <div className="field" style={{ flexBasis: 120 }}><label htmlFor="s-g">Guests</label>
+          <div className="field wide" style={{ flexBasis: 120 }}><label htmlFor="s-g">Guests</label>
             <select id="s-g" name="guests" defaultValue="2"><option value="1">1 guest</option><option value="2">2 guests</option><option value="3">3 guests</option><option value="4">4 guests</option><option value="6">6+ guests</option></select>
           </div>
-          <button className="btn btn-gold">Search stays</button>
+          <button className="btn btn-accent">Search stays</button>
         </form>
       )}
       {tab === "cars" && (
@@ -38,10 +38,10 @@ export function HeroSearch() {
           <div className="field" style={{ flexBasis: 260 }}><label htmlFor="c-q">Pick-up location</label><input id="c-q" name="q" placeholder="City or airport" /></div>
           <div className="field"><label htmlFor="c-from">Pick-up date</label><input id="c-from" name="start" type="date" /></div>
           <div className="field"><label htmlFor="c-to">Return date</label><input id="c-to" name="end" type="date" /></div>
-          <div className="field" style={{ flexBasis: 140 }}><label htmlFor="c-type">Vehicle type</label>
+          <div className="field wide" style={{ flexBasis: 140 }}><label htmlFor="c-type">Vehicle type</label>
             <select id="c-type" name="type" defaultValue=""><option value="">Any type</option><option>Sedan</option><option>SUV</option><option>Pickup</option><option>Van</option><option>Bus</option></select>
           </div>
-          <button className="btn btn-gold">Find cars</button>
+          <button className="btn btn-accent">Find cars</button>
         </form>
       )}
       {tab === "land" && (
@@ -51,7 +51,7 @@ export function HeroSearch() {
             <select id="l-use" name="use" defaultValue=""><option value="">Any use</option><option>Residential</option><option>Commercial</option><option>Agricultural</option><option>Mixed use</option></select>
           </div>
           <div className="field"><label htmlFor="l-max">Max price (GH₵)</label><input id="l-max" name="max" inputMode="numeric" placeholder="No limit" /></div>
-          <button className="btn btn-gold">Browse land</button>
+          <button className="btn btn-accent">Browse land</button>
         </form>
       )}
       {tab === "houses" && (
@@ -61,7 +61,7 @@ export function HeroSearch() {
             <select id="h-bed" name="bedrooms" defaultValue=""><option value="">Any</option><option value="2">2+</option><option value="3">3+</option><option value="4">4+</option></select>
           </div>
           <div className="field"><label htmlFor="h-max">Max price (GH₵)</label><input id="h-max" name="max" inputMode="numeric" placeholder="No limit" /></div>
-          <button className="btn btn-gold">Browse houses</button>
+          <button className="btn btn-accent">Browse houses</button>
         </form>
       )}
       {tab === "insurance" && (
@@ -69,7 +69,7 @@ export function HeroSearch() {
           <div className="field" style={{ flexBasis: 260 }}><label htmlFor="i-type">Cover type</label>
             <select id="i-type" name="cover" defaultValue="motor"><option value="motor">Motor insurance</option><option value="home">Home &amp; property</option><option value="travel">Travel</option><option value="health">Health</option></select>
           </div>
-          <button className="btn btn-gold">Get a quote</button>
+          <button className="btn btn-accent">Get a quote</button>
         </form>
       )}
     </div>

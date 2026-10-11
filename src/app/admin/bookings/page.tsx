@@ -24,10 +24,10 @@ export default async function AdminBookings({ searchParams }: { searchParams: Pr
   const tabs = [["", "All"], ["confirmed", "Confirmed"], ["pending_payment", "Awaiting payment"], ["completed", "Completed"], ["cancelled", "Cancelled"]];
   return (
     <>
-      <h1 className="serif" style={{ fontSize: 32 }}>Bookings</h1>
+      <h1 className="display" style={{ fontSize: 32 }}>Bookings</h1>
       <section className="box stack">
         <div className="row">
-          {tabs.map(([v, label]) => <Link key={v} href={v ? `/admin/bookings?status=${v}` : "/admin/bookings"} className={`btn btn-sm ${status === v ? "btn-navy" : "btn-line"}`}>{label}</Link>)}
+          {tabs.map(([v, label]) => <Link key={v} href={v ? `/admin/bookings?status=${v}` : "/admin/bookings"} className={`btn btn-sm ${status === v ? "btn-ink" : "btn-line"}`}>{label}</Link>)}
         </div>
         <div className="table-wrap">
           <table className="data">

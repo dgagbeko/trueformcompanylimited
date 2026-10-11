@@ -33,7 +33,7 @@ export default async function CheckoutPage({ params, searchParams }: { params: P
       <div className="wrap with-aside" style={{ maxWidth: 1100, padding: "40px 24px 80px" }}>
         <section className="main box stack" style={{ padding: 32, gap: 22 }}>
           <div className="row between">
-            <h1 className="serif" style={{ fontSize: 32 }}>Payment</h1>
+            <h1 className="display" style={{ fontSize: 32 }}>Payment</h1>
             <span className="row" style={{ gap: 8, fontSize: 14, fontWeight: 700, color: "var(--ok)" }}><Icon name="lock" size={18} />Secure checkout</span>
           </div>
           {b.status === "confirmed" ? (
@@ -55,7 +55,7 @@ export default async function CheckoutPage({ params, searchParams }: { params: P
                 <form action={startPayment}>
                   <input type="hidden" name="kind" value="booking" />
                   <input type="hidden" name="id" value={b.reference} />
-                  <button className="btn btn-gold" style={{ width: "100%" }}>Pay {formatMoney(b.totalAmount)}</button>
+                  <button className="btn btn-accent" style={{ width: "100%" }}>Pay {formatMoney(b.totalAmount)}</button>
                 </form>
               ) : (
                 <p className="alert alert-error">Online payments are not configured yet. Set PAYSTACK_SECRET_KEY to enable checkout.</p>
@@ -68,7 +68,7 @@ export default async function CheckoutPage({ params, searchParams }: { params: P
           <span className="eyebrow" style={{ fontSize: 12 }}>Booking summary</span>
           <div className="row" style={{ gap: 14, flexWrap: "nowrap" }}>
             <div className="photo" style={{ width: 84, height: 68, borderRadius: 8, flex: "0 0 auto", padding: 0 }}>{cover && <img src={imageUrl(cover.url, 200)} alt="" />}</div>
-            <div className="stack" style={{ gap: 2 }}><b style={{ color: "var(--navy)" }}>{l.title}</b><span className="muted" style={{ fontSize: 14 }}>{l.location}</span></div>
+            <div className="stack" style={{ gap: 2 }}><b style={{ color: "var(--ink)" }}>{l.title}</b><span className="muted" style={{ fontSize: 14 }}>{l.location}</span></div>
           </div>
           <div className="stack" style={{ gap: 10, borderTop: "1px solid var(--line)", paddingTop: 14, fontSize: 15 }}>
             <div className="row between"><span className="muted">{l.category === "car" ? "Pick-up" : "Check-in"}</span><b>{formatDate(b.startDate)}</b></div>

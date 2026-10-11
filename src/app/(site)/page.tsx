@@ -1,59 +1,95 @@
 import Link from "next/link";
 import { HeroSearch } from "@/components/HeroSearch";
 import { ListingCard } from "@/components/ListingCard";
-import { Icon } from "@/components/Icon";
 import { featuredListings } from "@/lib/listings";
 import { getSettings } from "@/lib/settings";
+import { imageUrl } from "@/lib/media";
 
 export const dynamic = "force-dynamic";
 
-const SERVICES = [
-  { title: "Short stays", body: "Furnished homes, apartments and rooms by the night.", cta: "Find a stay", href: "/stays", icon: "bed" },
-  { title: "Car rentals", body: "Sedans, SUVs and vans for any date range.", cta: "Rent a car", href: "/cars", icon: "car" },
-  { title: "Land sales", body: "Plots with clear location, size and zoning.", cta: "Browse land", href: "/land", icon: "land" },
-  { title: "House sales", body: "Homes for sale with full details and media.", cta: "Browse houses", href: "/houses", icon: "home" },
-  { title: "Insurance", body: "Motor, home, travel and health cover.", cta: "Get a quote", href: "/insurance", icon: "shield" },
-] as const;
-
-const STEPS = [
-  ["Create and verify your account", "Sign up with your name, email and phone, then confirm the link we email you."],
-  ["Book, inquire or request a quote", "Choose dates for stays and cars, send an inquiry on land or houses, or request insurance cover."],
-  ["Pay securely and manage it all", "Pay by card or mobile money, get an emailed receipt, and modify or cancel from your dashboard."],
+const LANES = [
+  { n: "01", title: "Stays", body: "Homes and apartments by the night.", href: "/stays", cls: "lane-stay" },
+  { n: "02", title: "Cars", body: "Sedans, SUVs and vans for any dates.", href: "/cars", cls: "lane-car" },
+  { n: "03", title: "Land", body: "Plots with clear size, title and zoning.", href: "/land", cls: "lane-land" },
+  { n: "04", title: "Houses", body: "Homes for sale, fully documented.", href: "/houses", cls: "lane-house" },
+  { n: "05", title: "Insurance", body: "Motor, home, travel and health cover.", href: "/insurance", cls: "lane-ins" },
 ];
 
+const STEPS = [
+  ["Join free", "Sign up with your name, email and phone, then confirm the link we email you."],
+  ["Book or inquire", "Pick dates for stays and cars, send an inquiry on land or homes, or request a quote."],
+  ["Pay your way", "MoMo or card. Receipt by email. Change or cancel from your dashboard."],
+];
+
+/** "Stay. Drive. Own. Protect." → the 3rd sentence in orange and the 4th in green. */
+function Headline({ text }: { text: string }) {
+  const parts = text.split(/(?<=\.)\s+/);
+  if (parts.length < 2) return <>{text}</>;
+  return (
+    <>
+      {parts.map((p, i) => (
+        <span key={i} className={i === 2 ? "t-accent" : i === 3 ? "t-green" : undefined}>
+          {p}
+          {i < parts.length - 1 ? " " : ""}
+        </span>
+      ))}
+    </>
+  );
+}
+
 export default async function HomePage() {
-  const [settings, featured] = await Promise.all([getSettings(), featuredListings(4)]);
+  const [s, featured] = await Promise.all([getSettings(), featuredListings(4)]);
+  // Hero photos: the ones set in Site settings, else featured listings' covers.
+  const covers = featured.flatMap((l) => (l.cover ? [{ url: l.cover.url, href: `/listings/${l.slug}` }] : []));
+  const pick = (setting: string, i: number) => (setting ? { url: setting, href: null } : covers[i] ?? null);
+  const mosaic = [pick(s.heroImage1, 0), pick(s.heroImage2, 1), pick(s.heroImage3, 2)];
+  const fallbacks = [
+    { label: "Stays", href: "/stays", bg: "var(--photo)", color: "var(--ink)" },
+    { label: "Book a stay →", href: "/stays", bg: "var(--accent)", color: "#fff" },
+    { label: "Find land →", href: "/land", bg: "var(--green)", color: "#fff" },
+  ];
+
   return (
     <>
       <section className="hero">
         <div className="inner">
-          <div className="stack" style={{ gap: 20 }}>
-            <span className="eyebrow" style={{ color: "var(--gold)", letterSpacing: ".2em" }}>STAYS · CARS · LAND · HOMES · INSURANCE</span>
-            <h1>{settings.heroTitle}</h1>
-            <p>{settings.heroSubtitle}</p>
+          <div className="hero-copy">
+            <h1><Headline text={s.heroTitle} /></h1>
+            <p>{s.heroSubtitle}</p>
           </div>
+          <div className="hero-mosaic">
+            {mosaic.map((m, i) =>
+              m ? (
+                <div key={i} className="photo" style={{ padding: 0 }}>
+                  <img src={imageUrl(m.url, i === 0 ? 900 : 600)} alt="" />
+                </div>
+              ) : (
+                <Link key={i} href={fallbacks[i].href} className="mosaic-tile" style={{ background: fallbacks[i].bg, color: fallbacks[i].color }}>
+                  {fallbacks[i].label}
+                </Link>
+              ),
+            )}
+          </div>
+        </div>
+        <div className="wrap" style={{ paddingTop: 36 }}>
           <HeroSearch />
         </div>
       </section>
 
-      <section className="section" style={{ paddingBottom: 40 }}>
+      <section className="section" style={{ paddingBottom: 32 }}>
         <div className="wrap">
           <div className="section-head">
-            <div className="stack" style={{ gap: 10 }}>
-              <span className="eyebrow">Our services</span>
-              <h2 className="section-title">Five services, one account</h2>
-            </div>
-            <p className="muted" style={{ maxWidth: 440, lineHeight: 1.6 }}>
-              Register once, verify your email, and manage every booking, inquiry and quote from your personal dashboard.
-            </p>
+            <h2 className="section-title">Pick your lane.</h2>
+            <p className="muted" style={{ maxWidth: 420, lineHeight: 1.6 }}>One account for everything. Verified listings, and payments you can trust.</p>
           </div>
-          <div className="grid" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: 18 }}>
-            {SERVICES.map((s) => (
-              <Link key={s.title} href={s.href} className="card service-card">
-                <span className="icon-tile"><Icon name={s.icon} /></span>
-                <span style={{ fontSize: 19, fontWeight: 800, color: "var(--navy)" }}>{s.title}</span>
-                <span className="muted" style={{ fontSize: 15, lineHeight: 1.55 }}>{s.body}</span>
-                <span style={{ marginTop: "auto", fontSize: 14, fontWeight: 700, color: "var(--gold-text)" }}>{s.cta} →</span>
+          <div className="lanes">
+            {LANES.map((l) => (
+              <Link key={l.n} href={l.href} className={`lane ${l.cls}`}>
+                <span className="n">{l.n}</span>
+                <span className="stack" style={{ gap: 6 }}>
+                  <span className="t">{l.title}</span>
+                  <span className="b">{l.body}</span>
+                </span>
               </Link>
             ))}
           </div>
@@ -61,14 +97,11 @@ export default async function HomePage() {
       </section>
 
       {featured.length > 0 && (
-        <section className="section" style={{ paddingTop: 40 }}>
+        <section className="section" style={{ paddingTop: 48 }}>
           <div className="wrap">
             <div className="section-head">
-              <div className="stack" style={{ gap: 10 }}>
-                <span className="eyebrow">Featured</span>
-                <h2 className="section-title">Hand-picked for you</h2>
-              </div>
-              <Link className="btn btn-line" href="/stays">View all stays</Link>
+              <h2 className="section-title" style={{ fontSize: "clamp(30px, 3.5vw, 40px)" }}>Fresh this week</h2>
+              <Link href="/stays" style={{ fontWeight: 700 }}>See everything →</Link>
             </div>
             <div className="grid">
               {featured.map((l) => <ListingCard key={l.id} l={l} showCategory />)}
@@ -78,13 +111,13 @@ export default async function HomePage() {
       )}
 
       <section className="section band">
-        <div className="wrap stack" style={{ gap: 40 }}>
-          <h2 className="section-title" style={{ textAlign: "center" }}>How it works</h2>
-          <div className="grid" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 24 }}>
+        <div className="wrap stack" style={{ gap: 32 }}>
+          <h2 className="section-title">Three steps. That’s it.</h2>
+          <div className="grid" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: 16 }}>
             {STEPS.map(([t, b], i) => (
-              <div key={t} className="box stack" style={{ padding: 30, gap: 12 }}>
-                <span className="serif" style={{ fontSize: 44, color: "var(--gold)", lineHeight: 1 }}>0{i + 1}</span>
-                <span style={{ fontSize: 19, fontWeight: 800, color: "var(--navy)" }}>{t}</span>
+              <div key={t} className="box stack" style={{ padding: 28, gap: 10, border: "2px solid var(--ink)" }}>
+                <span className="display" style={{ fontSize: 48, lineHeight: 1, color: ["var(--accent)", "var(--green)", "var(--ink)"][i] }}>0{i + 1}</span>
+                <span className="display" style={{ fontSize: 24 }}>{t}</span>
                 <span className="muted" style={{ lineHeight: 1.6 }}>{b}</span>
               </div>
             ))}
@@ -92,24 +125,29 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <section className="band-ink">
+        <div className="wrap row between" style={{ paddingTop: 64, paddingBottom: 64, gap: 32 }}>
+          <h2 className="display" style={{ fontSize: "clamp(32px, 4vw, 48px)", lineHeight: 1.02, maxWidth: 620 }}>
+            MoMo or card. <span className="t-yellow">Receipt every time.</span>
+          </h2>
+          <div className="row" style={{ gap: 10 }}>
+            {["MTN MoMo", "Telecel Cash", "AirtelTigo Money", "Visa · Mastercard"].map((m) => (
+              <span key={m} style={{ border: "1px solid #4a4a4a", borderRadius: 999, padding: "10px 16px", fontWeight: 600 }}>{m}</span>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="section">
-        <div className="wrap grid" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: 24 }}>
-          <div className="card stack" style={{ padding: 36 }}>
-            <span className="eyebrow">Secure payments</span>
-            <h3 className="serif" style={{ fontSize: 30 }}>Pay the way you already do</h3>
-            <p className="muted" style={{ lineHeight: 1.6 }}>Payments run through Paystack's secure hosted checkout. Your card and wallet details are never stored on our servers.</p>
-            <div className="row" style={{ gap: 10 }}>
-              {["Visa", "Mastercard", "MTN MoMo", "Telecel Cash", "AirtelTigo Money"].map((m) => (
-                <span key={m} style={{ border: "1px solid var(--input)", borderRadius: 8, padding: "10px 14px", fontWeight: 700, fontSize: 14 }}>{m}</span>
-              ))}
-            </div>
+        <div className="wrap">
+        <div className="row between" style={{ gap: 24, border: "2px solid var(--ink)", borderRadius: 22, padding: "clamp(22px, 4vw, 36px)", boxShadow: "8px 8px 0 var(--green)" }}>
+          <div className="stack" style={{ gap: 10, maxWidth: 640 }}>
+            <span className="eyebrow">Insurance</span>
+            <h2 className="display" style={{ fontSize: "clamp(28px, 3.5vw, 40px)" }}>Protect your car, home and travels.</h2>
+            <p className="muted" style={{ lineHeight: 1.6 }}>Request a motor, home, travel or health quote in two minutes. Our team gets back to you with options.</p>
           </div>
-          <div className="stack" style={{ padding: 36, background: "var(--navy)", color: "#fff", borderRadius: 14 }}>
-            <span className="eyebrow" style={{ color: "var(--gold)" }}>Insurance</span>
-            <h3 className="serif" style={{ fontSize: 30, color: "#fff" }}>Protect your car, home and travels</h3>
-            <p style={{ color: "var(--on-navy)", lineHeight: 1.6 }}>Compare motor, home, travel and health cover and request a quote in minutes. Our team gets back to you with options.</p>
-            <Link className="btn btn-gold" href="/insurance" style={{ alignSelf: "flex-start" }}>Explore cover</Link>
-          </div>
+          <Link className="btn btn-ink" href="/insurance">Get a quote</Link>
+        </div>
         </div>
       </section>
     </>

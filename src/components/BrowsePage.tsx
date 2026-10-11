@@ -61,17 +61,17 @@ export async function BrowsePage({ category, sp }: { category: Category; sp: Sea
             <div className="field" style={{ flex: "1 1 120px" }}><label htmlFor="bedrooms">Bedrooms</label>
               <select id="bedrooms" name="bedrooms" defaultValue={v(sp, "bedrooms")}><option value="">Any</option>{[1, 2, 3, 4, 5].map((n) => <option key={n} value={n}>{n}+</option>)}</select></div>
           )}
-          <div className="field" style={{ flex: "1 1 160px" }}><label htmlFor="sort">Sort</label>
+          <div className={`field${category === "stay" ? " wide" : ""}`} style={{ flex: "1 1 160px" }}><label htmlFor="sort">Sort</label>
             <select id="sort" name="sort" defaultValue={v(sp, "sort")}>
               <option value="">Recommended</option><option value="price_asc">Price: low to high</option><option value="price_desc">Price: high to low</option><option value="newest">Newest</option>
             </select></div>
-          <button className="btn btn-gold">Search</button>
+          <button className="btn btn-accent">Search</button>
         </form>
       </section>
       <section className="wrap" style={{ padding: "32px 24px 88px" }}>
         <div className="row between" style={{ marginBottom: 24 }}>
           <div className="stack" style={{ gap: 4 }}>
-            <h1 className="serif" style={{ fontSize: 34 }}>{c.title}</h1>
+            <h1 className="display" style={{ fontSize: 34 }}>{c.title}</h1>
             <span className="muted">{results.length === 0 ? `No ${c.noun} match your search yet.` : `${results.length} ${c.noun} found`}</span>
           </div>
           {Object.keys(sp).length > 0 && <Link href={c.path} className="btn btn-line btn-sm">Clear filters</Link>}

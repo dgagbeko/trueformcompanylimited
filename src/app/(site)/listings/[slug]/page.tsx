@@ -59,7 +59,7 @@ export default async function ListingPage({ params }: Props) {
       <div className="row between" style={{ alignItems: "flex-end", gap: 16 }}>
         <div className="stack" style={{ gap: 10 }}>
           <span className={`pill ${statusClass}`} style={{ alignSelf: "flex-start" }}>{statusLabel}</span>
-          <h1 className="serif" style={{ fontSize: "clamp(30px, 4vw, 40px)" }}>{l.title}</h1>
+          <h1 className="display" style={{ fontSize: "clamp(30px, 4vw, 40px)" }}>{l.title}</h1>
           <span className="muted" style={{ fontSize: 16 }}>{l.location}{l.region ? `, ${l.region}` : ""}</span>
         </div>
         <div className="stack" style={{ gap: 2, alignItems: "flex-end" }}>
@@ -88,7 +88,7 @@ export default async function ListingPage({ params }: Props) {
               <h2 style={{ fontSize: 22 }}>{l.category === "car" ? "Features" : "Amenities"}</h2>
               <ul className="grid" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 10, listStyle: "none", padding: 0, margin: 0 }}>
                 {l.amenities.map((a) => (
-                  <li key={a} className="row" style={{ gap: 10 }}><span style={{ color: "var(--gold-text)" }}><Icon name="check" size={18} /></span>{a}</li>
+                  <li key={a} className="row" style={{ gap: 10 }}><span style={{ color: "var(--accent-text)" }}><Icon name="check" size={18} /></span>{a}</li>
                 ))}
               </ul>
             </div>
@@ -126,7 +126,7 @@ export default async function ListingPage({ params }: Props) {
           )}
           {!bookable && (
             <div className="box stack" style={{ background: "var(--mist)", gap: 8 }}>
-              <b style={{ color: "var(--navy)" }}>How buying works</b>
+              <b style={{ color: "var(--ink)" }}>How buying works</b>
               <span style={{ lineHeight: 1.7, color: "var(--body)" }}>
                 Send an inquiry. Our team contacts you to arrange a viewing and verify documents. Once you agree a price, you can pay a {deposit}% deposit online to reserve the property.
               </span>
@@ -143,14 +143,14 @@ export default async function ListingPage({ params }: Props) {
               {user ? (
                 <BookingForm listingId={l.id} slug={l.slug} priceMinor={l.price} priceLabel={formatMoney(l.price)} unit={l.category === "car" ? "day" : "night"} maxGuests={l.maxGuests} today={todayIso()} />
               ) : (
-                <Link className="btn btn-gold" href={`/login?next=/listings/${l.slug}`}>Sign in to book</Link>
+                <Link className="btn btn-accent" href={`/login?next=/listings/${l.slug}`}>Sign in to book</Link>
               )}
             </>
           ) : (
             <>
-              <h2 className="serif" style={{ fontSize: 24 }}>Interested in this {l.category === "land" ? "plot" : "house"}?</h2>
+              <h2 className="display" style={{ fontSize: 24 }}>Interested in this {l.category === "land" ? "plot" : "house"}?</h2>
               <span className="muted" style={{ fontSize: 15 }}>Send an expression of interest. You can track its status in your dashboard.</span>
-              {user ? <InquiryForm listingId={l.id} slug={l.slug} phone={user.phone} /> : <Link className="btn btn-navy" href={`/login?next=/listings/${l.slug}`}>Sign in to inquire</Link>}
+              {user ? <InquiryForm listingId={l.id} slug={l.slug} phone={user.phone} /> : <Link className="btn btn-ink" href={`/login?next=/listings/${l.slug}`}>Sign in to inquire</Link>}
               {deposit > 0 && <span className="hint">After your inquiry, you can pay a {deposit}% deposit ({formatMoney(Math.round((l.price * deposit) / 100))}) from your dashboard to reserve.</span>}
             </>
           )}
