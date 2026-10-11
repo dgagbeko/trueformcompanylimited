@@ -3,11 +3,11 @@ import type { Category } from "@/db/schema";
 import { searchListings, type SearchParams } from "@/lib/listings";
 import { ListingCard } from "./ListingCard";
 
-const COPY: Record<Category, { title: string; noun: string; path: string }> = {
-  stay: { title: "Short stays", noun: "places", path: "/stays" },
-  car: { title: "Car rentals", noun: "cars", path: "/cars" },
-  land: { title: "Land for sale", noun: "plots", path: "/land" },
-  house: { title: "Houses for sale", noun: "houses", path: "/houses" },
+const COPY: Record<Category, { title: string; noun: string; one: string; path: string; n: string; tagline: string }> = {
+  stay: { title: "Short stays", noun: "places", one: "place", path: "/stays", n: "01", tagline: "Homes and apartments by the night. Book and pay with MoMo or card." },
+  car: { title: "Car rentals", noun: "cars", one: "car", path: "/cars", n: "02", tagline: "Sedans, SUVs and vans for any dates — pick up where it suits you." },
+  land: { title: "Land for sale", noun: "plots", one: "plot", path: "/land", n: "03", tagline: "Plots with clear size, title and zoning. Inquire and reserve online." },
+  house: { title: "Houses for sale", noun: "houses", one: "house", path: "/houses", n: "04", tagline: "Homes for sale, fully documented and photographed." },
 };
 
 const v = (sp: SearchParams, k: string) => {
@@ -21,8 +21,16 @@ export async function BrowsePage({ category, sp }: { category: Category; sp: Sea
   const dated = category === "stay" || category === "car";
   return (
     <>
-      <section className="band" style={{ borderBottom: "1px solid var(--line)" }}>
-        <form className="wrap search-form" style={{ padding: "20px 24px" }} action={c.path}>
+      <section className={`browse-band browse-${category}`}>
+        <div className="wrap browse-head">
+          <span className="browse-n" aria-hidden="true">{c.n}</span>
+          <div className="stack" style={{ gap: 8 }}>
+            <h1>{c.title}</h1>
+            <p>{c.tagline}</p>
+          </div>
+        </div>
+        <div className="wrap">
+        <form className="browse-card search-form" action={c.path} aria-label={`Search ${c.title.toLowerCase()}`}>
           <div className="field" style={{ flex: "2 1 240px" }}>
             <label htmlFor="q">{category === "car" ? "Pick-up location" : "Location"}</label>
             <input id="q" name="q" defaultValue={v(sp, "q")} placeholder="City, area or landmark" />
@@ -61,19 +69,17 @@ export async function BrowsePage({ category, sp }: { category: Category; sp: Sea
             <div className="field" style={{ flex: "1 1 120px" }}><label htmlFor="bedrooms">Bedrooms</label>
               <select id="bedrooms" name="bedrooms" defaultValue={v(sp, "bedrooms")}><option value="">Any</option>{[1, 2, 3, 4, 5].map((n) => <option key={n} value={n}>{n}+</option>)}</select></div>
           )}
-          <div className={`field${category === "stay" ? " wide" : ""}`} style={{ flex: "1 1 160px" }}><label htmlFor="sort">Sort</label>
+          <div className={`field${category === "stay" ? " wide" : ""}`} style={{ flex: "0 1 220px" }}><label htmlFor="sort">Sort</label>
             <select id="sort" name="sort" defaultValue={v(sp, "sort")}>
               <option value="">Recommended</option><option value="price_asc">Price: low to high</option><option value="price_desc">Price: high to low</option><option value="newest">Newest</option>
             </select></div>
           <button className="btn btn-accent">Search</button>
         </form>
+        </div>
       </section>
-      <section className="wrap" style={{ padding: "32px 24px 88px" }}>
+      <section className="wrap browse-results">
         <div className="row between" style={{ marginBottom: 24 }}>
-          <div className="stack" style={{ gap: 4 }}>
-            <h1 className="display" style={{ fontSize: 34 }}>{c.title}</h1>
-            <span className="muted">{results.length === 0 ? `No ${c.noun} match your search yet.` : `${results.length} ${c.noun} found`}</span>
-          </div>
+          <h2 className="display" style={{ fontSize: 26 }}>{results.length === 0 ? `No ${c.noun} match your search yet.` : `${results.length} ${results.length === 1 ? c.one : c.noun} found`}</h2>
           {Object.keys(sp).length > 0 && <Link href={c.path} className="btn btn-line btn-sm">Clear filters</Link>}
         </div>
         <div className="grid">
