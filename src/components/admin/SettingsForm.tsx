@@ -17,7 +17,7 @@ export function SettingsForm({ settings: s }: { settings: SiteSettings }) {
       </section>
       <section className="box stack">
         <h2 style={{ fontSize: 18 }}>Home page photos</h2>
-        <p className="hint">Three photos beside the headline: one tall photo and two smaller ones. Use bright, high-quality landscape photos of your stays, cars and land. Empty slots use your featured listings’ cover photos instead.</p>
+        <p className="hint">One tall photo beside the headline, plus two optional smaller ones. Tip: on any listing’s photos, click “Use on home page” to make that photo the large one. If the small slots are empty, the orange “Book a stay” and green “Find land” tiles show instead.</p>
         <ImageField name="heroImage1" label="Large photo" defaultValue={s.heroImage1} />
         <ImageField name="heroImage2" label="Top-right photo" defaultValue={s.heroImage2} />
         <ImageField name="heroImage3" label="Bottom-right photo" defaultValue={s.heroImage3} />

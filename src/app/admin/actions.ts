@@ -116,6 +116,16 @@ export async function getUploadSignature(listingId: string) {
   return signUpload(`trueform/listings/${listingId}`);
 }
 
+/** Make a listing photo the large photo beside the headline on the home page. */
+export async function setHomePhoto(url: string) {
+  const admin = await requireAdmin();
+  if (!/^https:\/\//.test(url)) return { error: "Only photos hosted on https:// links can be used on the home page." };
+  await db.insert(schema.settings).values({ key: "heroImage1", value: url }).onConflictDoUpdate({ target: schema.settings.key, set: { value: url } });
+  await audit(admin.id, "set home page photo", "settings");
+  revalidatePath("/", "layout");
+  return { ok: true };
+}
+
 /** Signature for uploading site-wide images (home page photos) straight to Cloudinary. */
 export async function getSiteUploadSignature() {
   await requireAdmin();
