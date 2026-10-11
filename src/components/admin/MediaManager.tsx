@@ -32,10 +32,18 @@ export function MediaManager({ listingId, items, cloudinary }: { listingId: stri
       body.append("timestamp", String(sig.timestamp));
       body.append("signature", sig.signature);
       body.append("folder", sig.folder);
-      const res = await fetch(`https://api.cloudinary.com/v1_1/${sig.cloudName}/${isVideo ? "video" : "image"}/upload`, { method: "POST", body });
-      if (!res.ok) { setError(`Upload failed for ${file.name}.`); continue; }
-      const json = (await res.json()) as { secure_url: string; public_id: string };
-      await addMedia(listingId, json.secure_url, isVideo ? "video" : "image", json.public_id);
+      try {
+        const res = await fetch(`https://api.cloudinary.com/v1_1/${encodeURIComponent(sig.cloudName)}/${isVideo ? "video" : "image"}/upload`, { method: "POST", body });
+        const json = (await res.json().catch(() => ({}))) as { secure_url?: string; public_id?: string; error?: { message?: string } };
+        if (!res.ok || !json.secure_url) {
+          // Show Cloudinary's own reason (e.g. "Invalid Signature", "Invalid cloud_name") so setup problems are easy to fix.
+          setError(`Upload failed for ${file.name}: ${json.error?.message ?? `Cloudinary returned ${res.status}`}`);
+          continue;
+        }
+        await addMedia(listingId, json.secure_url, isVideo ? "video" : "image", json.public_id ?? null);
+      } catch {
+        setError(`Upload failed for ${file.name}: could not reach Cloudinary. Check your internet connection and try again.`);
+      }
     }
     setBusy("");
     if (fileRef.current) fileRef.current.value = "";
