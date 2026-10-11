@@ -17,3 +17,11 @@ export async function POST(req: NextRequest) {
   }
   return NextResponse.json({ received: true });
 }
+
+/** Opening this address in a browser just confirms it is reachable; Paystack itself always uses POST. */
+export function GET() {
+  return NextResponse.json({
+    ok: true,
+    message: "Paystack webhook endpoint is live. Only Paystack's servers send payments here, using POST.",
+  });
+}

@@ -1,9 +1,10 @@
 import "server-only";
+import { appUrl } from "./app-url";
 
 const esc = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 
-export const appUrl = () => (process.env.APP_URL || "http://localhost:3000").replace(/\/$/, "");
+export { appUrl };
 
 /** Wrap content in the branded email layout. `lines` are plain text paragraphs (escaped). */
 function layout(title: string, lines: string[], cta?: { label: string; url: string }) {

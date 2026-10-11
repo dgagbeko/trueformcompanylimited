@@ -166,3 +166,28 @@ table.data td { padding: 14px; border-bottom: 1px solid var(--line); font-size: 
 .stat b { font-size: 28px; color: var(--navy); }
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; }
 @media (max-width: 720px) { .shell-main { padding: 20px 16px; } }
+
+/* Listing gallery + full-screen photo viewer */
+.gallery-wrap { position: relative; }
+.gallery-item { border: 0; padding: 0; cursor: zoom-in; font: inherit; }
+.gallery-item img { transition: transform 0.25s ease; }
+.gallery-item:hover img { transform: scale(1.03); }
+.gallery-item:focus-visible { outline: 3px solid var(--gold); outline-offset: -3px; }
+.gallery-all { position: absolute; right: 14px; bottom: 14px; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2); }
+.lightbox { position: fixed; inset: 0; z-index: 1000; background: rgba(6, 14, 24, 0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 64px 72px 112px; }
+.lightbox-img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 6px; user-select: none; }
+.lightbox-bar { position: absolute; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; color: #fff; font-weight: 700; }
+.lightbox-btn { background: rgba(255, 255, 255, 0.12); color: #fff; border: 0; width: 48px; height: 48px; border-radius: 50%; font-size: 26px; line-height: 1; cursor: pointer; display: grid; place-items: center; }
+.lightbox-btn:hover { background: rgba(255, 255, 255, 0.25); }
+.lightbox-btn:focus-visible, .lightbox-thumb:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.lightbox-prev, .lightbox-next { position: absolute; top: 50%; transform: translateY(-50%); font-size: 34px; }
+.lightbox-prev { left: 12px; }
+.lightbox-next { right: 12px; }
+.lightbox-thumbs { position: absolute; bottom: 14px; left: 0; right: 0; display: flex; gap: 8px; justify-content: center; overflow-x: auto; padding: 0 16px; }
+.lightbox-thumb { flex: 0 0 auto; width: 72px; height: 52px; padding: 0; border: 2px solid transparent; border-radius: 6px; overflow: hidden; cursor: pointer; opacity: 0.55; background: #222; }
+.lightbox-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.lightbox-thumb[aria-current="true"] { border-color: var(--gold); opacity: 1; }
+@media (max-width: 720px) {
+  .lightbox { padding: 56px 8px 96px; }
+  .lightbox-prev, .lightbox-next { top: auto; bottom: 84px; transform: none; }
+}

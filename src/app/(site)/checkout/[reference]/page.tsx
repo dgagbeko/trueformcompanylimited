@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { and, eq } from "drizzle-orm";
+import { and, asc, eq } from "drizzle-orm";
 import { db, schema } from "@/db";
 import { requireVerifiedUser } from "@/lib/auth";
 import { formatDate, formatMoney } from "@/lib/format";
@@ -23,7 +23,7 @@ export default async function CheckoutPage({ params, searchParams }: { params: P
     .where(and(eq(schema.bookings.reference, reference), eq(schema.bookings.userId, user.id)));
   if (!row) notFound();
   const { b, l } = row;
-  const [cover] = await db.select().from(schema.media).where(and(eq(schema.media.listingId, l.id), eq(schema.media.kind, "image"))).orderBy(schema.media.sortOrder).limit(1);
+  const [cover] = await db.select().from(schema.media).where(and(eq(schema.media.listingId, l.id), eq(schema.media.kind, "image"))).orderBy(asc(schema.media.sortOrder), asc(schema.media.id)).limit(1);
   const unit = l.category === "car" ? "day" : "night";
   const expiresAt = new Date(b.createdAt.getTime() + PAYMENT_HOLD_MINUTES * 60_000);
   const expired = b.status === "pending_payment" && expiresAt < new Date();

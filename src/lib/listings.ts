@@ -13,7 +13,7 @@ async function attachCovers(rows: Listing[]): Promise<ListingWithCover[]> {
     .select()
     .from(schema.media)
     .where(and(inArray(schema.media.listingId, rows.map((r) => r.id)), eq(schema.media.kind, "image")))
-    .orderBy(asc(schema.media.sortOrder));
+    .orderBy(asc(schema.media.sortOrder), asc(schema.media.id));
   const first = new Map<string, Media>();
   for (const m of all) if (!first.has(m.listingId)) first.set(m.listingId, m);
   return rows.map((r) => ({ ...r, cover: first.get(r.id) ?? null }));
@@ -105,7 +105,7 @@ export async function getPublicListing(slug: string, isAdmin: boolean) {
   const [listing] = await db.select().from(schema.listings).where(eq(schema.listings.slug, slug));
   if (!listing) return null;
   if (!isAdmin && listing.status === "draft") return null;
-  const gallery = await db.select().from(schema.media).where(eq(schema.media.listingId, listing.id)).orderBy(asc(schema.media.sortOrder));
+  const gallery = await db.select().from(schema.media).where(eq(schema.media.listingId, listing.id)).orderBy(asc(schema.media.sortOrder), asc(schema.media.id));
   return { listing, gallery };
 }
 

@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { asc, eq, sql } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { db, schema } from "@/db";
 import { requireAdmin } from "@/lib/auth";
 import { audit } from "@/lib/audit";
@@ -140,20 +140,23 @@ export async function removeMedia(fd: FormData) {
   revalidatePath("/", "layout");
 }
 
-/** Move a photo/video one step earlier or later. The first image is the cover (FR-LIST-05). */
-export async function moveMedia(fd: FormData) {
+/**
+ * Save the full order of a listing's photos/videos exactly as the admin sees it.
+ * Sending the whole order (instead of "move one step") means quick repeated clicks
+ * can never undo each other. The first image is the cover (FR-LIST-05).
+ */
+export async function reorderMedia(listingId: string, orderedIds: string[]) {
   await requireAdmin();
-  const [m] = await db.select().from(schema.media).where(eq(schema.media.id, str(fd, "id")));
-  if (!m) return;
-  const all = await db.select().from(schema.media).where(eq(schema.media.listingId, m.listingId)).orderBy(asc(schema.media.sortOrder), asc(schema.media.id));
-  const i = all.findIndex((x) => x.id === m.id);
-  const j = str(fd, "dir") === "up" ? i - 1 : i + 1;
-  if (j < 0 || j >= all.length) return;
-  [all[i], all[j]] = [all[j], all[i]];
   await db.transaction(async (tx) => {
-    for (const [n, item] of all.entries()) await tx.update(schema.media).set({ sortOrder: n }).where(eq(schema.media.id, item.id));
+    // Lock this listing's media rows so two saves cannot interleave.
+    const rows = await tx.select({ id: schema.media.id }).from(schema.media).where(eq(schema.media.listingId, listingId)).for("update");
+    const known = new Set(rows.map((r) => r.id));
+    const order = orderedIds.filter((id) => known.has(id));
+    // Anything not in the submitted list (e.g. added in another tab) keeps its place at the end.
+    for (const r of rows) if (!order.includes(r.id)) order.push(r.id);
+    for (const [n, id] of order.entries()) await tx.update(schema.media).set({ sortOrder: n }).where(eq(schema.media.id, id));
   });
-  revalidatePath(`/admin/listings/${m.listingId}`);
+  revalidatePath(`/admin/listings/${listingId}`);
   revalidatePath("/", "layout");
 }
 
