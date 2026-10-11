@@ -287,7 +287,6 @@ table.data td { padding: 14px; border-bottom: 1px solid var(--line); font-size: 
 .browse-head { display: flex; align-items: flex-end; gap: 24px; padding-bottom: 32px !important; }
 .browse-head h1 { color: var(--band-text); font-size: clamp(40px, 6vw, 72px); line-height: 0.95; letter-spacing: -0.035em; }
 .browse-head p { font-size: 18px; line-height: 1.5; max-width: 560px; opacity: 0.92; }
-.browse-n { font: 800 clamp(56px, 8vw, 110px)/0.8 var(--display); letter-spacing: -0.04em; opacity: 0.25; }
 .browse-card { background: #fff; color: var(--ink); border: 2px solid var(--ink); border-radius: 22px; padding: 18px; margin-bottom: -64px; position: relative; box-shadow: 8px 8px 0 var(--band-shadow); }
 .browse-card .field > label { color: var(--ink); }
 .browse-card .field input:not([type="checkbox"]), .browse-card .field select { background: var(--sand); }
@@ -300,4 +299,3 @@ table.data td { padding: 14px; border-bottom: 1px solid var(--line); font-size: 
   .browse-card { padding: 14px; box-shadow: 6px 6px 0 var(--band-shadow); margin-bottom: -40px; }
   .browse-results { padding-top: 72px !important; }
 }
-@media (max-width: 520px) { .browse-n { display: none; } }

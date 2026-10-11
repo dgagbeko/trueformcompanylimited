@@ -3,11 +3,11 @@ import type { Category } from "@/db/schema";
 import { searchListings, type SearchParams } from "@/lib/listings";
 import { ListingCard } from "./ListingCard";
 
-const COPY: Record<Category, { title: string; noun: string; one: string; path: string; n: string; tagline: string }> = {
-  stay: { title: "Short stays", noun: "places", one: "place", path: "/stays", n: "01", tagline: "Homes and apartments by the night. Book and pay with MoMo or card." },
-  car: { title: "Car rentals", noun: "cars", one: "car", path: "/cars", n: "02", tagline: "Sedans, SUVs and vans for any dates — pick up where it suits you." },
-  land: { title: "Land for sale", noun: "plots", one: "plot", path: "/land", n: "03", tagline: "Plots with clear size, title and zoning. Inquire and reserve online." },
-  house: { title: "Houses for sale", noun: "houses", one: "house", path: "/houses", n: "04", tagline: "Homes for sale, fully documented and photographed." },
+const COPY: Record<Category, { title: string; noun: string; one: string; path: string; tagline: string }> = {
+  stay: { title: "Short stays", noun: "places", one: "place", path: "/stays", tagline: "Homes and apartments by the night. Book and pay with MoMo or card." },
+  car: { title: "Car rentals", noun: "cars", one: "car", path: "/cars", tagline: "Sedans, SUVs and vans for any dates — pick up where it suits you." },
+  land: { title: "Land for sale", noun: "plots", one: "plot", path: "/land", tagline: "Plots with clear size, title and zoning. Inquire and reserve online." },
+  house: { title: "Houses for sale", noun: "houses", one: "house", path: "/houses", tagline: "Homes for sale, fully documented and photographed." },
 };
 
 const v = (sp: SearchParams, k: string) => {
@@ -23,7 +23,6 @@ export async function BrowsePage({ category, sp }: { category: Category; sp: Sea
     <>
       <section className={`browse-band browse-${category}`}>
         <div className="wrap browse-head">
-          <span className="browse-n" aria-hidden="true">{c.n}</span>
           <div className="stack" style={{ gap: 8 }}>
             <h1>{c.title}</h1>
             <p>{c.tagline}</p>
