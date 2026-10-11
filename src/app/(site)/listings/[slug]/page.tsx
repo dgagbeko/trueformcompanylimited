@@ -10,6 +10,7 @@ import { imageUrl } from "@/lib/media";
 import { BookingForm } from "@/components/BookingForm";
 import { InquiryForm } from "@/components/InquiryForm";
 import { Icon } from "@/components/Icon";
+import { Gallery } from "@/components/Gallery";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -67,24 +68,7 @@ export default async function ListingPage({ params }: Props) {
         </div>
       </div>
 
-      <div className="gallery" style={images.length <= 1 ? { gridTemplateColumns: "1fr", gridAutoRows: "min(420px, 60vw)" } : undefined}>
-        {images.length === 0 && <div className="photo">Photos coming soon</div>}
-        {images.slice(0, 5).map((m, i) => (
-          <div key={m.id} className="photo">
-            <img src={imageUrl(m.url, i === 0 ? 1200 : 600)} alt={`${l.title} photo ${i + 1}`} loading={i === 0 ? "eager" : "lazy"} />
-          </div>
-        ))}
-      </div>
-      {images.length > 5 && (
-        <details>
-          <summary className="btn btn-line btn-sm" style={{ display: "inline-flex" }}>Show all {images.length} photos</summary>
-          <div className="grid" style={{ marginTop: 16, gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 10 }}>
-            {images.slice(5).map((m) => (
-              <div key={m.id} className="photo" style={{ height: 180, borderRadius: 8 }}><img src={imageUrl(m.url, 600)} alt="" loading="lazy" /></div>
-            ))}
-          </div>
-        </details>
-      )}
+      <Gallery photos={images.map((m) => ({ id: m.id, url: m.url }))} title={l.title} />
 
       <div className="with-aside">
         <div className="main stack" style={{ gap: 32 }}>

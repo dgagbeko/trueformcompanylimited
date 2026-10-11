@@ -20,8 +20,10 @@ live the moment you save.
 3. Fill in the title, location, region and price:
    - Stays: price **per night** · Cars: **daily rate** · Land and houses: **asking price**.
 4. Leave status as **Draft** and click **Create listing**. Drafts are invisible to the public.
-5. On the next screen, **upload photos and videos** (or paste a link). The **first photo is the cover image** —
-   use the ← → arrows to reorder. Images are resized and compressed automatically.
+5. On the next screen, **upload photos and videos** (or paste a link). The **first photo is the cover image**,
+   outlined in gold. Click **Make cover** on any photo to use it instead, or use the ← → arrows to reorder.
+   The new order shows immediately and saves in the background ("Order saved ✓" appears when done).
+   Images are resized and compressed automatically.
 6. Change status to **Published** and click **Save changes**. The listing now appears in search and has its own shareable page.
    Use **Preview on website** to check it.
 7. Tick **Feature on home page** to show it in "Hand-picked for you".

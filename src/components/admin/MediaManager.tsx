@@ -1,8 +1,8 @@
 "use client";
-import { useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Media } from "@/db/schema";
-import { addMedia, getUploadSignature, moveMedia, removeMedia } from "@/app/admin/actions";
+import { addMedia, getUploadSignature, removeMedia, reorderMedia } from "@/app/admin/actions";
 import { imageUrl } from "@/lib/media";
 
 const MAX_IMAGE_MB = 10;
@@ -14,7 +14,57 @@ export function MediaManager({ listingId, items, cloudinary }: { listingId: stri
   const [busy, setBusy] = useState("");
   const [error, setError] = useState("");
   const [url, setUrl] = useState("");
-  const [, startTransition] = useTransition();
+  // Local copy of the order so arrow clicks show instantly, even on a slow connection.
+  const [order, setOrder] = useState(items);
+  const [saving, setSaving] = useState<"" | "saving" | "saved" | "failed">("");
+  const pendingSaves = useRef(0);
+
+  // Take the server's version when it changes (upload, removal, page refresh), unless a save is in flight.
+  const serverKey = items.map((m) => `${m.id}:${m.sortOrder}`).join(",");
+  useEffect(() => {
+    if (pendingSaves.current === 0) setOrder(items);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [serverKey]);
+
+  const coverId = order.find((m) => m.kind === "image")?.id;
+
+  async function saveOrder(next: Media[]) {
+    setOrder(next);
+    setSaving("saving");
+    pendingSaves.current++;
+    try {
+      // The whole order is sent each time, so the last click always wins.
+      await reorderMedia(listingId, next.map((m) => m.id));
+      pendingSaves.current--;
+      if (pendingSaves.current === 0) setSaving("saved");
+    } catch {
+      pendingSaves.current--;
+      setSaving("failed");
+    }
+  }
+
+  const move = (index: number, delta: number) => {
+    const j = index + delta;
+    if (j < 0 || j >= order.length) return;
+    const next = [...order];
+    [next[index], next[j]] = [next[j], next[index]];
+    saveOrder(next);
+  };
+
+  const makeCover = (index: number) => {
+    const next = [...order];
+    const [item] = next.splice(index, 1);
+    saveOrder([item, ...next]);
+  };
+
+  async function remove(id: string) {
+    if (!confirm("Remove this file from the listing?")) return;
+    setOrder((o) => o.filter((m) => m.id !== id));
+    const fd = new FormData();
+    fd.append("id", id);
+    await removeMedia(fd);
+    router.refresh();
+  }
 
   async function upload(files: FileList | null) {
     if (!files?.length) return;
@@ -58,17 +108,13 @@ export function MediaManager({ listingId, items, cloudinary }: { listingId: stri
     else { setUrl(""); router.refresh(); }
   }
 
-  const act = (fn: (fd: FormData) => Promise<void>, fields: Record<string, string>) => () => {
-    const fd = new FormData();
-    Object.entries(fields).forEach(([k, v]) => fd.append(k, v));
-    startTransition(async () => { await fn(fd); router.refresh(); });
-  };
-
   return (
     <section className="box stack">
       <div className="row between">
         <h2 style={{ fontSize: 18 }}>Photos &amp; videos</h2>
-        <span className="hint">The first photo is the cover image. Use the arrows to reorder.</span>
+        <span className="hint" role="status">
+          {saving === "saving" ? "Saving order…" : saving === "saved" ? "Order saved ✓" : saving === "failed" ? "Could not save the order — refresh and try again." : "The first photo is the cover image. Use the arrows or “Make cover” to reorder."}
+        </span>
       </div>
       {cloudinary ? (
         <div className="row">
@@ -91,22 +137,27 @@ export function MediaManager({ listingId, items, cloudinary }: { listingId: stri
       {busy && <p className="alert alert-info" role="status">{busy}</p>}
       {error && <p className="alert alert-error" role="alert">{error}</p>}
       <div className="grid" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 12 }}>
-        {items.map((m, i) => (
-          <div key={m.id} className="card" style={{ overflow: "hidden" }}>
+        {order.map((m, i) => (
+          <div key={m.id} className="card" style={{ overflow: "hidden", outline: m.id === coverId ? "2px solid var(--gold)" : undefined }}>
             <div className="photo" style={{ height: 130, padding: 8 }}>
               {m.kind === "image" ? <img src={imageUrl(m.url, 400)} alt="" /> : <video src={m.url} muted preload="metadata" />}
-              <span style={{ position: "relative" }} className="tag">{i === 0 && m.kind === "image" ? "COVER" : m.kind.toUpperCase()}</span>
+              <span style={{ position: "relative" }} className="tag">{m.id === coverId ? "COVER" : `${i + 1} · ${m.kind.toUpperCase()}`}</span>
             </div>
             <div className="row" style={{ padding: 8, gap: 6, justifyContent: "space-between" }}>
               <span className="row" style={{ gap: 6 }}>
-                <button type="button" className="btn btn-line btn-sm" aria-label="Move earlier" disabled={i === 0} onClick={act(moveMedia, { id: m.id, dir: "up" })}>←</button>
-                <button type="button" className="btn btn-line btn-sm" aria-label="Move later" disabled={i === items.length - 1} onClick={act(moveMedia, { id: m.id, dir: "down" })}>→</button>
+                <button type="button" className="btn btn-line btn-sm" aria-label="Move earlier" disabled={i === 0} onClick={() => move(i, -1)}>←</button>
+                <button type="button" className="btn btn-line btn-sm" aria-label="Move later" disabled={i === order.length - 1} onClick={() => move(i, 1)}>→</button>
               </span>
-              <button type="button" className="btn btn-danger btn-sm" onClick={() => confirm("Remove this file from the listing?") && act(removeMedia, { id: m.id })()}>Remove</button>
+              <button type="button" className="btn btn-danger btn-sm" onClick={() => remove(m.id)}>Remove</button>
             </div>
+            {m.kind === "image" && m.id !== coverId && (
+              <div style={{ padding: "0 8px 8px" }}>
+                <button type="button" className="btn btn-line btn-sm" style={{ width: "100%" }} onClick={() => makeCover(i)}>Make cover</button>
+              </div>
+            )}
           </div>
         ))}
-        {items.length === 0 && <p className="muted">No photos or videos yet.</p>}
+        {order.length === 0 && <p className="muted">No photos or videos yet.</p>}
       </div>
     </section>
   );

@@ -14,7 +14,7 @@ export default async function EditListing({ params, searchParams }: { params: Pr
   if (!/^[0-9a-f-]{36}$/.test(id)) notFound();
   const [listing] = await db.select().from(schema.listings).where(eq(schema.listings.id, id));
   if (!listing) notFound();
-  const items = await db.select().from(schema.media).where(eq(schema.media.listingId, id)).orderBy(asc(schema.media.sortOrder));
+  const items = await db.select().from(schema.media).where(eq(schema.media.listingId, id)).orderBy(asc(schema.media.sortOrder), asc(schema.media.id));
   return (
     <>
       <div className="row between">
