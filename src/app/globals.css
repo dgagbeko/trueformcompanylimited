@@ -156,9 +156,8 @@ p { margin: 0; }
 
 /* Service "lanes" */
 .lanes { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
-.lane { text-decoration: none; border-radius: var(--radius); padding: 22px; min-height: 230px; display: flex; flex-direction: column; justify-content: space-between; border: 2px solid transparent; transition: transform 0.15s ease; }
+.lane { text-decoration: none; border-radius: var(--radius); padding: 22px; min-height: 230px; display: flex; flex-direction: column; justify-content: flex-end; border: 2px solid transparent; transition: transform 0.15s ease; }
 .lane:hover { transform: translateY(-4px); }
-.lane .n { font: 800 44px/1 var(--display); letter-spacing: -0.03em; }
 .lane .t { font: 800 26px var(--display); letter-spacing: -0.02em; }
 .lane .b { font-size: 14px; line-height: 1.45; opacity: 0.92; }
 .lane-stay { background: var(--accent); color: #fff; }
@@ -171,7 +170,6 @@ p { margin: 0; }
 @media (max-width: 900px) {
   .lanes { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; margin: 0 -16px; padding: 0 16px 6px; scrollbar-width: none; }
   .lane { flex: 0 0 160px; min-height: 170px; padding: 16px; scroll-snap-align: start; }
-  .lane .n { font-size: 30px; }
   .lane .t { font-size: 22px; }
   .lane .b { display: none; }
 }
@@ -203,6 +201,10 @@ p { margin: 0; }
 .fact span { font-size: 13px; font-weight: 700; color: var(--muted); }
 .fact b { font: 800 20px var(--display); letter-spacing: -0.02em; color: var(--ink); }
 .icon-tile { width: 48px; height: 48px; border-radius: 12px; background: var(--sand); color: var(--accent-text); display: grid; place-items: center; }
+
+/* Listing page price: right-aligned beside the title on wide screens, under it (left) on phones */
+.price-block { display: flex; flex-direction: column; gap: 2px; align-items: flex-end; text-align: right; }
+@media (max-width: 720px) { .price-block { align-items: flex-start; text-align: left; } }
 
 /* Layout helpers */
 .with-aside { display: flex; flex-wrap: wrap; gap: 40px; align-items: flex-start; }
