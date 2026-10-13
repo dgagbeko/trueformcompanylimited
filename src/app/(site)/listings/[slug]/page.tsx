@@ -62,7 +62,7 @@ export default async function ListingPage({ params }: Props) {
           <h1 className="display" style={{ fontSize: "clamp(30px, 4vw, 40px)" }}>{l.title}</h1>
           <span className="muted" style={{ fontSize: 16 }}>{l.location}{l.region ? `, ${l.region}` : ""}</span>
         </div>
-        <div className="stack" style={{ gap: 2, alignItems: "flex-end" }}>
+        <div className="price-block">
           <span className="label">{bookable ? "Price" : "Asking price"}</span>
           <span style={{ fontSize: 30, fontWeight: 800 }}>{formatMoney(l.price)} <span className="muted" style={{ fontSize: 15, fontWeight: 500 }}>{priceUnit(l.category)}</span></span>
         </div>

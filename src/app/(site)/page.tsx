@@ -8,11 +8,11 @@ import { imageUrl } from "@/lib/media";
 export const dynamic = "force-dynamic";
 
 const LANES = [
-  { n: "01", title: "Stays", body: "Homes and apartments by the night.", href: "/stays", cls: "lane-stay" },
-  { n: "02", title: "Cars", body: "Sedans, SUVs and vans for any dates.", href: "/cars", cls: "lane-car" },
-  { n: "03", title: "Land", body: "Plots with clear size, title and zoning.", href: "/land", cls: "lane-land" },
-  { n: "04", title: "Houses", body: "Homes for sale, fully documented.", href: "/houses", cls: "lane-house" },
-  { n: "05", title: "Insurance", body: "Motor, home, travel and health cover.", href: "/insurance", cls: "lane-ins" },
+  { title: "Stays", body: "Homes and apartments by the night.", href: "/stays", cls: "lane-stay" },
+  { title: "Cars", body: "Sedans, SUVs and vans for any dates.", href: "/cars", cls: "lane-car" },
+  { title: "Land", body: "Plots with clear size, title and zoning.", href: "/land", cls: "lane-land" },
+  { title: "Houses", body: "Homes for sale, fully documented.", href: "/houses", cls: "lane-house" },
+  { title: "Insurance", body: "Motor, home, travel and health cover.", href: "/insurance", cls: "lane-ins" },
 ];
 
 const STEPS = [
@@ -84,8 +84,7 @@ export default async function HomePage() {
           </div>
           <div className="lanes">
             {LANES.map((l) => (
-              <Link key={l.n} href={l.href} className={`lane ${l.cls}`}>
-                <span className="n">{l.n}</span>
+              <Link key={l.href} href={l.href} className={`lane ${l.cls}`}>
                 <span className="stack" style={{ gap: 6 }}>
                   <span className="t">{l.title}</span>
                   <span className="b">{l.body}</span>
